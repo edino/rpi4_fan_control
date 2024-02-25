@@ -57,6 +57,15 @@ Video displaying the rpi4_fan_control script running as a service.
     </div>
 
 <div align="center">
+      <a href="https://www.youtube.com/watch?v=Pm1UngPpBKg">
+     <img 
+      src="https://img.youtube.com/vi/Pm1UngPpBKg/0.jpg" 
+      alt="Video displaying the rpi4_fan_control script running as a service." 
+      style="width:100%;">
+      </a>
+    </div>
+
+<div align="center">
   <iframe 
     width="560" 
     height="315" 
