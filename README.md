@@ -45,6 +45,11 @@ Check the status of the service: sudo systemctl status fan-control.service
 
 **Usage**
 
+Video displaying the rpi4_fan_control script running as a service.
+
+https://youtu.be/Pm1UngPpBKg
+
+
 Clone the repository and follow the steps in the "Prerequisites" section to set up the fan control service. The script will continuously monitor the CPU temperature and adjust the fan speed accordingly.
 License
 
