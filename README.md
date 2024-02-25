@@ -51,9 +51,6 @@ Video displaying the rpi4_fan_control script running as a service.
   <iframe 
     width="560" 
     height="315"
-
-      alt="Video displaying the rpi4_fan_control script running as a service." 
-      style="width:100%;"> 
     src="https://www.youtube.com/embed/Pm1UngPpBKg" 
     frameborder="0" 
     allowfullscreen>
