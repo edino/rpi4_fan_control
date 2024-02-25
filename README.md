@@ -1,17 +1,17 @@
-Raspberry Pi 4 Fan Control
+**Raspberry Pi 4 Fan Control**
 
-The FAN tested with this script is the one listed below:
+**The FAN tested with this script is the one listed below:**
 
 GeeekPi Aluminum Heatsink with PWM Controllable Fan for Raspberry Pi 4, Pi 4 Armor Lite Heatsink with PWM Speed Control Fan for Raspberry Pi 4 Model B
 https://www.amazon.ca/GeeekPi-Raspberry-Aluminum-Heatsink-Controllable/dp/B091L1XKL6
 
 Control fan speed based on CPU temperature using GPIO pin. Temp range 30-70°C, adjusting PWM values.
 
-Purpose
+**Purpose**
 
 This script controls the fan speed of a Raspberry Pi 4 based on the CPU temperature. It defines temperature thresholds and adjusts the PWM values to set the fan speed accordingly. The script continuously monitors the CPU temperature and adjusts the fan speed to maintain it within the specified range, aiming to provide effective cooling while minimizing noise.
 
-Prerequisites
+**Prerequisites**
 
 apt install pigpiod bc
 
@@ -43,7 +43,7 @@ Enable the service to start on boot: sudo systemctl enable --now fan-control.ser
 
 Check the status of the service: sudo systemctl status fan-control.service
 
-Usage
+**Usage**
 
 Clone the repository and follow the steps in the "Prerequisites" section to set up the fan control service. The script will continuously monitor the CPU temperature and adjust the fan speed accordingly.
 License
