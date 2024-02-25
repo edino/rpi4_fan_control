@@ -12,6 +12,7 @@
 # Purpose: The purpose of the script is to control the fan speed of a Raspberry Pi 4 based on the CPU temperature. It defines temperature thresholds and adjusts the PWM values to set the fan speed accordingly. The script continuously monitors the CPU temperature and adjusts the fan speed to maintain it within the specified range, aiming to provide effective cooling while minimizing noise.
 
 # Pre-requisites to run this script as a system service:
+# 0. apt install pigpiod bc
 # 1. Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
 # 2. Create a systemd service unit file:
 #    - Create a new unit file: sudo nano /etc/systemd/system/rpi4_fan_control.service
