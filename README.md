@@ -11,15 +11,13 @@ apt install pigpiod bc
 
 To run this script as a system service, follow these steps:
 
-    Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
+Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
 
-    Create a systemd service unit file:
+Create a systemd service unit file:
 
-        Create a new unit file: sudo nano /etc/systemd/system/rpi4_fan_control.service
+Create a new unit file: sudo nano /etc/systemd/system/rpi4_fan_control.service
 
-        Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.sh with the actual path to your script):
-
-        ini
+Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.sh with the actual path to your script):
 
         [Unit]
         Description=Fan Control Service
@@ -33,11 +31,11 @@ To run this script as a system service, follow these steps:
         [Install]
         WantedBy=multi-user.target
 
-    Reload systemd: sudo systemctl daemon-reload
+Reload systemd: sudo systemctl daemon-reload
 
-    Enable the service to start on boot: sudo systemctl enable --now fan-control.service
+Enable the service to start on boot: sudo systemctl enable --now fan-control.service
 
-    Check the status of the service: sudo systemctl status fan-control.service
+Check the status of the service: sudo systemctl status fan-control.service
 
 Usage
 
