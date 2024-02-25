@@ -47,6 +47,8 @@ Check the status of the service: sudo systemctl status fan-control.service
 
 Video displaying the rpi4_fan_control script running as a service.
 
+[![Alt text](https://img.youtube.com/vi/Pm1UngPpBKg/0.jpg)](https://www.youtube.com/watch?v=Pm1UngPpBKg)
+
 https://youtu.be/Pm1UngPpBKg
 
 
