@@ -53,6 +53,7 @@ https://youtu.be/Pm1UngPpBKg
 
 
 Clone the repository and follow the steps in the "Prerequisites" section to set up the fan control service. The script will continuously monitor the CPU temperature and adjust the fan speed accordingly.
-License
+
+**License**
 
 This project is licensed under the GPL-3.0 license. See the LICENSE file for details.
