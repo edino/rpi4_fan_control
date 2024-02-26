@@ -50,30 +50,11 @@ Video displaying the rpi4_fan_control script running as a service.
 <div align="center">
       <a href="https://www.youtube.com/embed/Pm1UngPpBKg">
      <img 
-      src="https://www.youtube.com/embed/Pm1UngPpBKg" 
-      alt="Video displaying the rpi4_fan_control script running as a service." 
-      style="width:100%;">
-      </a>
-    </div>
-
-<div align="center">
-      <a href="https://www.youtube.com/watch?v=Pm1UngPpBKg">
-     <img 
       src="https://img.youtube.com/vi/Pm1UngPpBKg/0.jpg" 
       alt="Video displaying the rpi4_fan_control script running as a service." 
       style="width:100%;">
       </a>
     </div>
-
-<div align="center">
-  <iframe 
-    width="560" 
-    height="315" 
-    src="https://www.youtube.com/embed/Pm1UngPpBKg" 
-    frameborder="0" 
-    allowfullscreen>
-  </iframe>
-</div>
 
 
 Clone the repository and follow the steps in the "Prerequisites" section to set up the fan control service. The script will continuously monitor the CPU temperature and adjust the fan speed accordingly.
