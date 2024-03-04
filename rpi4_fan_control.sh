@@ -19,6 +19,7 @@
 # Pre-requisites to run this script as a system service:
 # 0. apt install pigpiod bc lm-sensors cpufrequtils -y
 # 0.5. Add GPI18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
+# 0.7 Enable pigs service sudo systemctl enable --now pigpiod
 # 1. Download the script using: sudo curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh -o /usr/local/bin/rpi4_fan_control.sh
 # 1.1 Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
 # 2. Create a systemd service unit file:
