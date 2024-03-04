@@ -13,7 +13,13 @@ This script controls the fan speed of a Raspberry Pi 4 based on the CPU temperat
 
 **Prerequisites**
 
-apt install pigpiod bc
+apt install pigpiod bc lm-sensors cpufrequtils -y
+
+Add GPI18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
+
+(the config.txt file could be located also at /boot/config.txt)
+
+Download the script using: curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh
 
 To run this script as a system service, follow these steps:
 
@@ -39,9 +45,9 @@ Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.s
 
 Reload systemd: sudo systemctl daemon-reload
 
-Enable the service to start on boot: sudo systemctl enable --now fan-control.service
+Enable the service to start on boot: sudo systemctl enable --now rpi4_fan_control.service
 
-Check the status of the service: sudo systemctl status fan-control.service
+Check the status of the service: sudo systemctl status rpi4_fan_control.service
 
 **Usage**
 
