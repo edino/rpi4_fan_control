@@ -47,9 +47,9 @@
 FAN_PIN=18
 
 # Temperature thresholds
-MIN_TEMP=35
-MAX_TEMP=60
-TEMP_STEP=$((($MAX_TEMP - $MIN_TEMP) * 10 / 255))
+MIN_TEMP=30
+MAX_TEMP=70
+TEMP_STEP=$((($MAX_TEMP - $MIN_TEMP) * 10 / 254))
 if ((TEMP_STEP == 0)); then
     TEMP_STEP=1
 fi
@@ -57,7 +57,7 @@ echo "MIN_TEMP: $MIN_TEMP, MAX_TEMP: $MAX_TEMP, TEMP_STEP: $TEMP_STEP"
 
 # Define PWM_VALUES array
 PWM_VALUES=()
-for i in $(seq 0 255); do
+for i in $(seq 0 254); do
     PWM_VALUES[$i]=$i
 done
 
@@ -70,8 +70,8 @@ map_temp_to_pwm() {
         local index=$(awk -v temp=$temp -v min=$MIN_TEMP -v step=$TEMP_STEP 'BEGIN { printf "%.0f", (temp - min) * 10 / step }')
         if ((index < 0)); then
             index=0
-        elif ((index >= 255)); then
-            index=255
+        elif ((index >= 254)); then
+            index=254
         fi
         echo ${PWM_VALUES[$index]}
     fi
@@ -101,7 +101,7 @@ convert_pwm_to_rpm() {
     local pwm=$1
     local known_pwm=255
     local known_rpm=5000
-    local rpm=$(echo "scale=0; ($pwm * $known_rpm) / $known_pwm" | bc)
+    local rpm=$(echo "scale=0; ($pwm * $known_rpm + 0.5) / $known_pwm" | bc)
     echo $rpm
 }
 
