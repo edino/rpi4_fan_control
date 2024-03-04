@@ -17,7 +17,8 @@
 # Purpose: The purpose of the script is to control the fan speed of a Raspberry Pi 4 based on the CPU temperature. It defines temperature thresholds and adjusts the PWM values to set the fan speed accordingly. The script continuously monitors the CPU temperature and adjusts the fan speed to maintain it within the specified range, aiming to provide effective cooling while minimizing noise.
 
 # Pre-requisites to run this script as a system service:
-# 0. apt install pigpiod bc
+# 0. apt install pigpiod bc lm-sensors
+# 0.5. Add GPI18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
 # 1. Download the script using: curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh
 # 1.1 Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
 # 2. Create a systemd service unit file:
