@@ -18,7 +18,8 @@
 
 # Pre-requisites to run this script as a system service:
 # 0. apt install pigpiod bc
-# 1. Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
+# 1. Download the script using: curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh
+# 1.1 Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
 # 2. Create a systemd service unit file:
 #    - Create a new unit file: sudo nano /etc/systemd/system/rpi4_fan_control.service
 #    - Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.sh with the actual path to your script):
@@ -36,17 +37,17 @@
 #      WantedBy=multi-user.target
 ## Service ends here:
 # 3. Reload systemd: sudo systemctl daemon-reload
-# 4. Enable the service to start on boot: sudo systemctl enable --now fan-control.service
-# 5. Check the status of the service: sudo systemctl status fan-control.service
+# 4. Enable the service to start on boot: sudo systemctl enable --now frpi4_fan_control.service
+# 5. Check the status of the service: sudo systemctl status rpi4_fan_control.service
 
-# BuildDate: 7:30 PM EST 2024-02-24
+# BuildDate: 01:08 PM EST 2024-03-04
 
 # GPIO pin number for fan control
 FAN_PIN=18
 
 # Temperature thresholds
-MIN_TEMP=30
-MAX_TEMP=70
+MIN_TEMP=35
+MAX_TEMP=60
 TEMP_STEP=$((($MAX_TEMP - $MIN_TEMP) * 10 / 255))
 if ((TEMP_STEP == 0)); then
     TEMP_STEP=1
