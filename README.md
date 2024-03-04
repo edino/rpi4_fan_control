@@ -19,11 +19,11 @@ Add GPI18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /bo
 
 (the config.txt file could be located also at /boot/config.txt)
 
-Download the script using: curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh
+Download the script using: sudo curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh -o /usr/local/bin/rpi4_fan_control.sh
 
 To run this script as a system service, follow these steps:
 
-Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
+Ensure the script is executable: sudo chmod +x /usr/local/bin/rpi4_fan_control.sh
 
 Create a systemd service unit file:
 
