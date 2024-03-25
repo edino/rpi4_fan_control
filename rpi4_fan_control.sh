@@ -1,5 +1,3 @@
-#!/bin/bash
-
 ##############################################################################
 # Copyright (c) [2024] [Edino De Souza]
 # Original author: Edino De Souza
@@ -18,13 +16,13 @@
 
 # Pre-requisites to run this script as a system service:
 # 0. apt install pigpiod bc lm-sensors cpufrequtils -y
-# 0.5. Add GPI18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
-# 0.7 Enable pigs service sudo systemctl enable --now pigpiod
+# 0.5. Add GPIO18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
+# 0.7 Enable pigs service sudo systemctl enable --now pigpiod && sudo systemctl start --now pigpiod
 # 1. Download the script using: sudo curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh -o /usr/local/bin/rpi4_fan_control.sh
 # 1.1 Ensure the script is executable: chmod +x /usr/local/bin/rpi4_fan_control.sh
 # 2. Create a systemd service unit file:
-#    - Create a new unit file: sudo nano /etc/systemd/system/rpi4_fan_control.service
-#    - Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.sh with the actual path to your script):
+#    - Create a new unit file: sudo nano /etc/systemd/system/fan_control.service
+#    - Add the following content to the file (replace /usr/local/bin/fan_control.sh with the actual path to your script):
 ## Service starts here:
 #      [Unit]
 #      Description=Fan Control Service
@@ -32,17 +30,19 @@
 #      
 #      [Service]
 #      ExecStart=/usr/local/bin/rpi4_fan_control.sh
-#      ReadWritePaths=/sys/class/hwmon/hwmon1/
+#      ReadWritePaths=/sys/class/hwmon/
 #      Restart=always
 #      
 #      [Install]
 #      WantedBy=multi-user.target
 ## Service ends here:
 # 3. Reload systemd: sudo systemctl daemon-reload
-# 4. Enable the service to start on boot: sudo systemctl enable --now frpi4_fan_control.service
-# 5. Check the status of the service: sudo systemctl status rpi4_fan_control.service
+# 4. Enable the service to start on boot: sudo systemctl enable --now fan_control.service && sudo systemctl start --now fan_control.service
+# 5. Check the status of the service: sudo systemctl status fan_control.service
 
-# BuildDate: 01:08 PM EST 2024-03-04
+# BuildDate: 05:03 PM EST 2024-03-25
+
+#!/bin/bash
 
 # GPIO pin number for fan control
 FAN_PIN=18
@@ -50,7 +50,7 @@ FAN_PIN=18
 # Temperature thresholds
 MIN_TEMP=30
 MAX_TEMP=70
-TEMP_STEP=$((($MAX_TEMP - $MIN_TEMP) * 10 / 254))
+TEMP_STEP=$((($MAX_TEMP - $MIN_TEMP) * 10 / 255))
 if ((TEMP_STEP == 0)); then
     TEMP_STEP=1
 fi
@@ -58,7 +58,7 @@ echo "MIN_TEMP: $MIN_TEMP, MAX_TEMP: $MAX_TEMP, TEMP_STEP: $TEMP_STEP"
 
 # Define PWM_VALUES array
 PWM_VALUES=()
-for i in $(seq 0 254); do
+for i in $(seq 0 255); do
     PWM_VALUES[$i]=$i
 done
 
@@ -71,8 +71,8 @@ map_temp_to_pwm() {
         local index=$(awk -v temp=$temp -v min=$MIN_TEMP -v step=$TEMP_STEP 'BEGIN { printf "%.0f", (temp - min) * 10 / step }')
         if ((index < 0)); then
             index=0
-        elif ((index >= 254)); then
-            index=254
+        elif ((index >= 255)); then
+            index=255
         fi
         echo ${PWM_VALUES[$index]}
     fi
