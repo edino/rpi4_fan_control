@@ -19,6 +19,8 @@ Add GPI18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /bo
 
 (the config.txt file could be located also at /boot/config.txt)
 
+Enable pigs service sudo systemctl enable --now pigpiod && sudo systemctl start --now pigpiod
+
 Download the script using: sudo curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh -o /usr/local/bin/rpi4_fan_control.sh
 
 To run this script as a system service, follow these steps:
@@ -27,9 +29,9 @@ Ensure the script is executable: sudo chmod +x /usr/local/bin/rpi4_fan_control.s
 
 Create a systemd service unit file:
 
-Create a new unit file: sudo nano /etc/systemd/system/rpi4_fan_control.service
+Create a new unit file: sudo nano /etc/systemd/system/fan_control.service
 
-Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.sh with the actual path to your script):
+Add the following content to the file (replace /usr/local/bin/fan_control.sh with the actual path to your script):
 
         [Unit]
         Description=Fan Control Service
@@ -37,7 +39,7 @@ Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.s
 
         [Service]
         ExecStart=/usr/local/bin/rpi4_fan_control.sh
-        ReadWritePaths=/sys/class/hwmon/hwmon1/
+        ReadWritePaths=/sys/class/hwmon/
         Restart=always
 
         [Install]
@@ -45,9 +47,9 @@ Add the following content to the file (replace /usr/local/bin/rpi4_fan_control.s
 
 Reload systemd: sudo systemctl daemon-reload
 
-Enable the service to start on boot: sudo systemctl enable --now rpi4_fan_control.service
+Enable the service to start on boot: sudo systemctl enable --now fan_control.service && sudo systemctl start --now fan_control.service
 
-Check the status of the service: sudo systemctl status rpi4_fan_control.service
+Check the status of the service: sudo systemctl status fan_control.service
 
 **Usage**
 
