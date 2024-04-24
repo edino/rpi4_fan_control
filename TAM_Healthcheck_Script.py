@@ -4,7 +4,7 @@ from datetime import datetime
 
 # Function to log commands
 def log_command(command, description, log_file):
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S_%Z')
     with open(log_file, 'a') as f:
         f.write(f"[{timestamp}] {description}\n")
         f.write(f"[{timestamp}] Running: {command}\n")
@@ -60,9 +60,9 @@ def main():
     log_command('grep -i "DRDY ERR" /var/tslog/syslog.log*', "Check for Disk Errors", log_file)
     log_command('grep -i "drdy\|i/o\|segfault" /var/tslog/syslog.log*', "Check for Disk Errors", log_file)
     log_command('grep -i "media error" /var/tslog/syslog.log*', "Check for Disk Errors - This Particular error supports a straight RMA if the timestamp is recent and appliance has valid warranty", log_file)
-    log_command('tar -czvf /var/log_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/tslog/*.log* /var/tslog/*.gz*', "Compress Appliance Logs to be collected", log_file)
-    log_command('tar -czvf /var/kdump_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/crashkernel/*', "Compress Crash Kernel Dumps to be collected", log_file)
-    log_command('tar -czvf /var/cores_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/cores/*', "Compress Core Dumps to be collected", log_file)
+    log_command('tar -czvf /var/log_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/tslog/*.log* /var/tslog/*.gz* | ls -lah /var/log_Master* ', "Compress Appliance Logs to be collected", log_file)
+    log_command('tar -czvf /var/kdump_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/crashkernel/* | ls -lah /var/kdump_Master*', "Compress Crash Kernel Dumps to be collected", log_file)
+    log_command('tar -czvf /var/core_dump_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/cores/* | ls -lah /var/core_dump_Master*', "Compress Core Dumps to be collected", log_file)
 
 # Check if running as root
 if os.geteuid() != 0:
