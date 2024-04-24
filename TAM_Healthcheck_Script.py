@@ -1,27 +1,32 @@
 import os
 import subprocess
+from datetime import datetime
 import time
-import logging
+
+# Get the timezone abbreviation (e.g., EDT, EST, etc.)
+timezone_abbr = time.tzname[0] if time.localtime().tm_isdst == 0 else time.tzname[1]
+
+# Function to generate timestamp
+def get_timestamp():
+    current_time = time.localtime()
+    return f"{current_time.tm_year}-{current_time.tm_mon:02d}-{current_time.tm_mday:02d} {current_time.tm_hour:02d}:{current_time.tm_min:02d}:{current_time.tm_sec:02d}_{timezone_abbr}"
 
 # Function to log commands
 def log_command(command, description, log_file):
-    timestamp = time.strftime('%Y-%m-%d %H:%M:%S %Z')
+    timestamp = get_timestamp()
     with open(log_file, 'a') as f:
         f.write(f"[{timestamp}] {description}\n")
         f.write(f"[{timestamp}] Running: {command}\n")
-        result = subprocess.run(command, shell=True, stdout=f, stderr=subprocess.STDOUT)
-        f.write(f"[{timestamp}] Finished: {command}\n\n")
-    return result
-
+        try:
+            result = subprocess.run(command, shell=True, stdout=f, stderr=subprocess.STDOUT)
+            f.write(f"[{timestamp}] Finished: {command}\n\n")
+        except subprocess.CalledProcessError as e:
+            f.write(f"[{timestamp}] Error running command: {e}\n\n")
+    
 # Main function
 def main():
-    # Get the output of the nvram command
     nvram_output = subprocess.run(["nvram", "get", "#li.serial"], capture_output=True, text=True).stdout.strip()
-
-    # Log file path
-    current_time = time.localtime()
-    timezone_abbr = time.tzname[0] if time.localtime().tm_isdst == 0 else time.tzname[1]
-    log_file = f"/var/tam_healthcheck_{nvram_output}-{time.strftime('%Y-%m-%d_at_%H:%M:%S_%Z')}.log"
+    log_file = f"/var/tam_healthcheck_{nvram_output}-{get_timestamp()}.log"
     print(f"Executing commands and saving output to {log_file} ...")
 
     log_command("date", "Display current date and time", log_file)
