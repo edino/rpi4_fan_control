@@ -1,7 +1,6 @@
 import os
 import subprocess
 from datetime import datetime
-import glob
 import time
 
 # Function to log commands
@@ -14,28 +13,6 @@ def log_command(command, description, log_file):
         f.write(f"[{timestamp}] Finished: {command}\n\n")
     return result
     
-# Function to remove files after 30 minutes
-def remove_files_after_delay():
-    # List of files to remove
-    files_to_remove = [
-        "/var/tam_healthcheck*",
-        "/var/log_Master*",
-        "/var/kdump_Master*",
-        "/var/core_dump_Master*"
-    ]
-
-    # Sleep for 30 minutes (1800 seconds)
-    time.sleep(60)
-
-    # Remove the files
-    for file_pattern in files_to_remove:
-        for file_name in glob.glob(file_pattern):
-            try:
-                os.remove(file_name)
-                print(f"Removed file: {file_name}")
-            except Exception as e:
-                print(f"Error removing file {file_name}: {e}")
-
 # Main function
 def main():
     # Get the output of the nvram command
@@ -87,9 +64,6 @@ def main():
     log_command('tar -czvf /var/log_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/tslog/*.log* /var/tslog/*.gz* | ls -lah /var/log_Master*', "Compress Appliance Logs to be collected", log_file)
     log_command('tar -czvf /var/kdump_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/crashkernel/* | ls -lah /var/kdump_Master*', "Compress Crash Kernel Dumps to be collected", log_file)
     log_command('tar -czvf /var/core_dump_Master-$(nvram get "#li.serial")-$(date +"%Y-%m-%d_at_%T_%Z").tar.gz /var/cores/* | ls -lah /var/core_dump_Master*', "Compress Core Dumps to be collected", log_file)
-
-    # Call the cleanup function
-    remove_files_after_delay()
 
 # Check if running as root
 if os.geteuid() != 0:
