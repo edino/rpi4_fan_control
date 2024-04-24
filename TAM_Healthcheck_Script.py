@@ -3,7 +3,7 @@ import subprocess
 from datetime import datetime
 
 # Get the output of the nvram command
-nvram_output = subprocess.run(["nvram get '#li.serial'"], capture_output=True, text=True).stdout.strip()
+nvram_output = $(nvram get '#li.serial')
 
 # Log file path
 log_file = f"/var/tam_healthcheck_{nvram_output}-{datetime.now().strftime('%Y-%m-%d_at_%H:%M:%S_%Z')}.log"
