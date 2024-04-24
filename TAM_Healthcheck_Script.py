@@ -51,6 +51,14 @@ def main():
     log_command("conntrack -L | grep ESTABLISHED | wc -l", "Count established connections using conntrack")
     log_command("ipset -L lusers | wc -l", "Count IP addresses in the lusers IP set")
     log_command("curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -", "Run a speed test using speedtest-cli")
+    log_command('cish -c "system diagnostics show version-info"', "System Check Information Details")
+    log_command('cish -c "system ha show details"', "High Availability Check Information Details")
+    log_command('smartctl -a /dev/sda |grep "Device Model";smartctl -a /dev/sda | grep "Firmware Version"', "Disk Model and Firmware Details")
+    log_command('smartctl -a /dev/sdb |grep "Device Model";smartctl -a /dev/sdb | grep "Firmware Version"', "Disk Model and Firmware Details")
+    log_command('grep -i "exception Emask .* SAct .* SErr .* action .*\|Unrecovered read error\|I/O error" /var/tslog/syslog.log*', "Check for Disk Errors")
+    log_command('grep -i "DRDY ERR" /var/tslog/syslog.log*', "Check for Disk Errors")
+    log_command('grep -i "drdy\|i/o\|segfault" /var/tslog/syslog.log*', "Check for Disk Errors")
+    log_command('grep -i "media error" /var/tslog/syslog.log*', "Check for Disk Errors - This Particular error supports a straight RMA if the timestamp is recent and appliance has valid warranty")
 
 # Check if running as root
 if os.geteuid() != 0:
