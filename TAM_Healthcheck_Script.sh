@@ -1,5 +1,5 @@
 ## To execute the script:
-## curl -sL https://raw.githubusercontent.com/yourusername/yourrepository/master/yourscript.sh | bash
+## curl -sL https://raw.githubusercontent.com/edino/rpi4_fan_control/main/TAM_Healthcheck_Script.sh | bash
 
 #!/bin/sh
 
