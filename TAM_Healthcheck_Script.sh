@@ -1,7 +1,7 @@
 ## To execute the script:
 ## curl -sL https://raw.githubusercontent.com/yourusername/yourrepository/master/yourscript.sh | bash
 
-#!/bin/bash
+#!/bin/sh
 
 # Log file path
 log_file="/var/tam_healthcheck_$(nvram get '#li.serial')-$(date +"%Y-%m-%d_at_%T_%Z").log"
