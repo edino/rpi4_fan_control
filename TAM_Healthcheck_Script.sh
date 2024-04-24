@@ -1,6 +1,3 @@
-## To execute the script:
-## curl -sL https://raw.githubusercontent.com/edino/rpi4_fan_control/main/TAM_Healthcheck_Script.sh | bash
-
 #!/bin/sh
 
 # Log file path
