@@ -21,8 +21,8 @@ def main():
 
     log_command("date", "Display current date and time")
     log_command("uptime", "Show system uptime and load")
-    log_command("nvram get '#'li.serial", "Get the serial number of the device")
-    log_command("nvram get '#'li.master", "Get the master setting value")
+    log_command("nvram get '#li.serial'", "Get the serial number of the device")
+    log_command("nvram get '#li.master'", "Get the master setting value")
     log_command("df -kh", "Show disk space usage")
     log_command("grep 'cpu cores' /proc/cpuinfo | wc -l", "Count the number of CPU cores")
     log_command("cat /proc/scsi/scsi", "Display SCSI devices")
