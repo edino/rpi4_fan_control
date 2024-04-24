@@ -9,7 +9,7 @@ timezone_abbr = time.tzname[0] if time.localtime().tm_isdst == 0 else time.tznam
 # Function to generate timestamp
 def get_timestamp():
     current_time = time.localtime()
-    return f"{current_time.tm_year}-{current_time.tm_mon:02d}-{current_time.tm_mday:02d} {current_time.tm_hour:02d}:{current_time.tm_min:02d}:{current_time.tm_sec:02d}_{timezone_abbr}"
+    return f"{current_time.tm_year}-{current_time.tm_mon:02d}-{current_time.tm_mday:02d}_at_{current_time.tm_hour:02d}:{current_time.tm_min:02d}:{current_time.tm_sec:02d}_{timezone_abbr}"
 
 # Function to log commands
 def log_command(command, description, log_file):
