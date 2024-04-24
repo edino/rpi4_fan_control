@@ -3,7 +3,7 @@ import subprocess
 from datetime import datetime
 
 # Log file path
-log_file = f"/var/tam_healthcheck_{os.getenv('#li.serial')}-{datetime.now().strftime('%Y-%m-%d_at_%H:%M:%S_%Z')}.log"
+log_file = f"/var/tam_healthcheck_$(nvram get '#li.serial')-$(date +"%Y-%m-%d_at_%T_%Z").log"
 
 # Function to log commands
 def log_command(command, description):
