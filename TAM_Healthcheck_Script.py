@@ -20,6 +20,7 @@ def main():
 
     # Log file path
     log_file = f"/var/tam_healthcheck_{nvram_output}-{datetime.now().strftime('%Y-%m-%d_at_%H:%M:%S_%Z')}.log"
+    print(datetime.now().strftime('%Y-%m-%d_at_%H:%M:%S_%Z'))
     print(f"Executing commands and saving output to {log_file} ...")
 
     log_command("date", "Display current date and time", log_file)
