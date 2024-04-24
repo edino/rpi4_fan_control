@@ -2,14 +2,8 @@ import os
 import subprocess
 from datetime import datetime
 
-# Get the output of the nvram command
-nvram_output = subprocess.check_output(["nvram", "get", "#li.serial"]).decode().strip()
-
-# Log file path
-log_file = f"/var/tam_healthcheck_{nvram_output}-{datetime.now().strftime('%Y-%m-%d_at_%H:%M:%S_%Z')}.log"
-
 # Function to log commands
-def log_command(command, description):
+def log_command(command, description, log_file):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     with open(log_file, 'a') as f:
         f.write(f"[{timestamp}] {description}\n")
@@ -20,12 +14,16 @@ def log_command(command, description):
 
 # Main function
 def main():
+    # Get the output of the nvram command
+    nvram_output = subprocess.run(["nvram", "get", "#li.serial"], capture_output=True, text=True).stdout.strip()
+
+    # Log file path
+    log_file = f"/var/tam_healthcheck_{nvram_output}-{datetime.now().strftime('%Y-%m-%d_at_%H:%M:%S_%Z')}.log"
     print(f"Executing commands and saving output to {log_file} ...")
 
-    log_command("date", "Display current date and time")
-    log_command("uptime", "Show system uptime and load")
-    log_command("nvram get '#'li.serial", "Get the serial number of the device")
-    log_command("nvram get '#'li.master", "Get the master setting value")
+    log_command("date", "Display current date and time", log_file)
+    log_command("uptime", "Show system uptime and load", log_file)
+    log_command("nvram get '#'li.serial", "Get the serial number of the device", log_file)
     log_command("df -kh", "Show disk space usage")
     log_command("grep 'cpu cores' /proc/cpuinfo | wc -l", "Count the number of CPU cores")
     log_command("cat /proc/scsi/scsi", "Display SCSI devices")
