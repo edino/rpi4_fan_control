@@ -96,5 +96,9 @@ if os.geteuid() != 0:
     print("This script must be run as root")
     exit(1)
 
-# Call main function
-main()
+try:
+    # Call main function
+    main()
+except KeyboardInterrupt:
+    print("Script execution was manually interrupted by the user.")
+    exit(1)
