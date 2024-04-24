@@ -25,7 +25,7 @@ def remove_files_after_delay():
     ]
 
     # Sleep for 30 minutes (1800 seconds)
-    time.sleep(1800)
+    time.sleep(60)
 
     # Remove the files
     for file_pattern in files_to_remove:
