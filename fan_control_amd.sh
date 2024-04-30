@@ -48,14 +48,14 @@ set_fan_speed() {
 
 # Function to get CPU temperature
 get_cpu_temp() {
-    cpu_temp=$(grep -oP '(?<=Host_CPU_Temperature : \+)[0-9]+(\.[0-9]+)?' /sdisk/tslog/xgs-healthmond.log | tail -n 1)
+    cpu_temp=$(grep 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     echo $cpu_temp
     echo "$(date) - CPU Temperature: $cpu_temp ºC" >> $LOG_FILE
 }
 
 # Function to get NPU temperature
-get_npu_temp() {
-    npu_temp=$(grep -oP '(?<=NPU_CPU_Temperature : \+)[0-9]+(\.[0-9]+)?' /sdisk/tslog/xgs-healthmond.log | tail -n 1)
+get_npu_temp() {    
+    npu_temp=$(grep 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     echo $npu_temp
     echo "$(date) - NPU Temperature: $npu_temp ºC" >> $LOG_FILE
 }
