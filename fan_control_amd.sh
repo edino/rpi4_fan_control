@@ -4,8 +4,8 @@
 LOG_FILE="/sdisk/tslog/fan_control.log"
 
 # Temperature thresholds
-MIN_TEMP=3000
-MAX_TEMP=7000
+MIN_TEMP=30
+MAX_TEMP=70
 TEMP_RANGE=$((MAX_TEMP - MIN_TEMP))
 TEMP_STEP=$((TEMP_RANGE * 100 / 255))
 if [ "$TEMP_STEP" -eq 0 ]; then
@@ -51,7 +51,7 @@ set_fan_speed() {
 # Function to get CPU temperature
 get_cpu_temp() {
     local cpu_temp
-    cpu_temp=$(grep -m 1 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | awk '{print $NF}' | sed 's/.*: +//;s/ Degrees.*//')
+    cpu_temp=$(grep 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     if [ -n "$cpu_temp" ] && [ "$cpu_temp" -eq "$cpu_temp" ]; then
         echo "$cpu_temp"
         echo "$(date) - CPU Temperature: $((cpu_temp / 100)).$((cpu_temp % 100)) ºC" >> "$LOG_FILE"
@@ -63,7 +63,7 @@ get_cpu_temp() {
 # Function to get NPU temperature
 get_npu_temp() {
     local npu_temp
-    npu_temp=$(grep -m 1 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | awk '{print $NF}' | sed 's/.*: +//;s/ Degrees.*//')
+    npu_temp=$(grep 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     if [ -n "$npu_temp" ] && [ "$npu_temp" -eq "$npu_temp" ]; then
         echo "$npu_temp"
         echo "$(date) - NPU Temperature: $((npu_temp / 100)).$((npu_temp % 100)) ºC" >> "$LOG_FILE"
