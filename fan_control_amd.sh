@@ -21,17 +21,17 @@ LOG_FILE="/sdisk/tslog/fan_control.log"
 
 # Function to map temperature to fan speed PWM value
 map_temp_to_pwm() {
-    temp=$1
-    if [ $temp -lt $MIN_TEMP ]; then
+    local temp=$1
+    if [ "$temp" -lt "$MIN_TEMP" ]; then
         echo 0
     else
-        index=$(expr \( $temp - $MIN_TEMP \) \* 10 / $TEMP_STEP)
-        if [ $index -lt 0 ]; then
+        local index=$(( ($temp - $MIN_TEMP) * 10 / $TEMP_STEP ))
+        if [ "$index" -lt 0 ]; then
             index=0
-        elif [ $index -ge 255 ]; then
+        elif [ "$index" -ge 255 ]; then
             index=255
         fi
-        echo $PWM_VALUES | cut -d ' ' -f $(expr $index + 1)
+        echo "${PWM_VALUES[$index]}"
     fi
 }
 
