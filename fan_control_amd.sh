@@ -1,14 +1,14 @@
 #!/bin/sh
 
 # Temperature thresholds
-MIN_TEMP=300
-MAX_TEMP=700
+MIN_TEMP=3000
+MAX_TEMP=7000
 TEMP_RANGE=$((MAX_TEMP - MIN_TEMP))
-TEMP_STEP=$((TEMP_RANGE * 10 / 255))
+TEMP_STEP=$((TEMP_RANGE * 100 / 255))
 if [ "$TEMP_STEP" -eq 0 ]; then
     TEMP_STEP=1
 fi
-echo "MIN_TEMP: $((MIN_TEMP / 10)).$(printf "%02d" $(($MIN_TEMP % 10))), MAX_TEMP: $((MAX_TEMP / 10)).$(printf "%02d" $(($MAX_TEMP % 10))), TEMP_STEP: $((TEMP_STEP / 10)).$(printf "%02d" $(($TEMP_STEP % 10)))"
+echo "MIN_TEMP: $(printf "%0.2f" $(echo "scale=2; $MIN_TEMP / 100" | bc)), MAX_TEMP: $(printf "%0.2f" $(echo "scale=2; $MAX_TEMP / 100" | bc)), TEMP_STEP: $(printf "%0.2f" $(echo "scale=2; $TEMP_STEP / 100" | bc))"
 
 # Define PWM_VALUES array
 PWM_VALUES=""
@@ -25,7 +25,7 @@ map_temp_to_pwm() {
     if [ "$temp" -lt "$MIN_TEMP" ]; then
         echo 0
     else
-        local index=$(( (temp - MIN_TEMP) * 10 / TEMP_STEP ))
+        local index=$(( (temp - MIN_TEMP) * 100 / TEMP_STEP ))
         if [ "$index" -lt 0 ]; then
             index=0
         elif [ "$index" -ge 255 ]; then
@@ -50,14 +50,14 @@ set_fan_speed() {
 get_cpu_temp() {
     cpu_temp=$(grep 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     echo $cpu_temp
-    echo "$(date) - CPU Temperature: $((cpu_temp / 10)).$(printf "%02d" $(($cpu_temp % 10))) ºC" >> $LOG_FILE
+    echo "$(date) - CPU Temperature: $(printf "%0.2f" $(echo "scale=2; $cpu_temp / 100" | bc)) ºC" >> $LOG_FILE
 }
 
 # Function to get NPU temperature
 get_npu_temp() {
     npu_temp=$(grep 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     echo $npu_temp
-    echo "$(date) - NPU Temperature: $((npu_temp / 10)).$(printf "%02d" $(($npu_temp % 10))) ºC" >> $LOG_FILE
+    echo "$(date) - NPU Temperature: $(printf "%0.2f" $(echo "scale=2; $npu_temp / 100" | bc)) ºC" >> $LOG_FILE
 }
 
 # Function to convert PWM to RPM
@@ -65,7 +65,7 @@ convert_pwm_to_rpm() {
     pwm=$1
     known_pwm=255
     known_rpm=5000
-    rpm=$(( (pwm * known_rpm + 5) / 10 ))
+    rpm=$(( (pwm * known_rpm + 50) / 100 ))
     echo $rpm
 }
 
@@ -87,6 +87,6 @@ while true; do
     target_speed=$(map_temp_to_pwm $max_temp)
     rpm=$(convert_pwm_to_rpm $target_speed)
     set_fan_speed $target_speed
-    echo "$(date) - Current CPU temperature: $((cpu_temp / 10)).$(printf "%02d" $(($cpu_temp % 10))) ºC, Current NPU temperature: $((npu_temp / 10)).$(printf "%02d" $(($npu_temp % 10))) ºC, Target fan speed: $target_speed (PWM), Target fan RPM: $rpm RPM" >> $LOG_FILE
+    echo "$(date) - Current CPU temperature: $(printf "%0.2f" $(echo "scale=2; $cpu_temp / 100" | bc)) ºC, Current NPU temperature: $(printf "%0.2f" $(echo "scale=2; $npu_temp / 100" | bc)) ºC, Target fan speed: $target_speed (PWM), Target fan RPM: $rpm RPM" >> $LOG_FILE
     sleep 5 # Check temperature every 5 seconds
 done
