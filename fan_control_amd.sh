@@ -50,26 +50,16 @@ set_fan_speed() {
 
 # Function to get CPU temperature
 get_cpu_temp() {
-    local cpu_temp
     cpu_temp=$(grep 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
-    if [ -n "$cpu_temp" ] && [ "$cpu_temp" -eq "$cpu_temp" 2>/dev/null ]; then
-        echo "$cpu_temp"
-        echo "$(date) - CPU Temperature: $((cpu_temp / 100)).$((cpu_temp % 100)) ºC" >> "$LOG_FILE"
-    else
-        echo "Error: Unable to retrieve or invalid CPU temperature" >&2
-    fi
+    echo $cpu_temp
+    echo "$(date) - CPU Temperature: $(($cpu_temp / 100)).$(($cpu_temp % 100)) ºC" >> $LOG_FILE
 }
 
 # Function to get NPU temperature
 get_npu_temp() {
-    local npu_temp
     npu_temp=$(grep 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
-    if [ -n "$npu_temp" ] && [ "$npu_temp" -eq "$npu_temp" 2>/dev/null ]; then
-        echo "$npu_temp"
-        echo "$(date) - NPU Temperature: $((npu_temp / 100)).$((npu_temp % 100)) ºC" >> "$LOG_FILE"
-    else
-        echo "Error: Unable to retrieve or invalid NPU temperature" >&2
-    fi
+    echo $npu_temp
+    echo "$(date) - NPU Temperature: $(($npu_temp / 100)).$(($npu_temp % 100)) ºC" >> $LOG_FILE
 }
 
 # Function to convert PWM to RPM with maximum RPM limit
