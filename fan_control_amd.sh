@@ -52,14 +52,14 @@ set_fan_speed() {
 get_cpu_temp() {
     cpu_temp=$(grep 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     echo $cpu_temp
-    echo "$(date) - CPU Temperature: $(($cpu_temp / 100)).$(($cpu_temp % 100)) ºC" >> $LOG_FILE
+    echo "$(date) - CPU Temperature: $cpu_temp ºC" >> $LOG_FILE
 }
 
 # Function to get NPU temperature
-get_npu_temp() {
+get_npu_temp() {    
     npu_temp=$(grep 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
     echo $npu_temp
-    echo "$(date) - NPU Temperature: $(($npu_temp / 100)).$(($npu_temp % 100)) ºC" >> $LOG_FILE
+    echo "$(date) - NPU Temperature: $npu_temp ºC" >> $LOG_FILE
 }
 
 # Function to convert PWM to RPM with maximum RPM limit
