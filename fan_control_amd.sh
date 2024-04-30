@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Log file
 LOG_FILE="/sdisk/tslog/fan_control.log"
@@ -41,7 +41,8 @@ map_temp_to_pwm() {
 set_fan_speed() {
     local speed="$1"
     echo "$speed" > /sys/devices/platform/nct6775.2608/hwmon/hwmon0/pwm2
-    if [ $? -ne 0 ]; then
+    local exit_code=$?
+    if [ $exit_code -ne 0 ]; then
         echo "$(date) - Failed to set fan speed to $speed (PWM)" >> "$LOG_FILE"
     else
         echo "$(date) - Set fan speed to $speed (PWM), Current fan speed: $(cat /sys/devices/platform/nct6775.2608/hwmon/hwmon0/pwm2) (PWM)" >> "$LOG_FILE"
@@ -51,15 +52,15 @@ set_fan_speed() {
 # Function to get CPU temperature
 get_cpu_temp() {
     cpu_temp=$(grep 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
-    echo $cpu_temp
-    echo "$(date) - CPU Temperature: $cpu_temp ºC" >> $LOG_FILE
+    echo "$cpu_temp"
+    echo "$(date) - CPU Temperature: $cpu_temp ºC" >> "$LOG_FILE"
 }
 
 # Function to get NPU temperature
 get_npu_temp() {    
     npu_temp=$(grep 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
-    echo $npu_temp
-    echo "$(date) - NPU Temperature: $npu_temp ºC" >> $LOG_FILE
+    echo "$npu_temp"
+    echo "$(date) - NPU Temperature: $npu_temp ºC" >> "$LOG_FILE"
 }
 
 # Function to convert PWM to RPM with maximum RPM limit
