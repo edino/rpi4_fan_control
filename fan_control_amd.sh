@@ -4,11 +4,11 @@
 MIN_TEMP=3000
 MAX_TEMP=7000
 TEMP_RANGE=$((MAX_TEMP - MIN_TEMP))
-TEMP_STEP=$((TEMP_RANGE * 100 / 255))
+TEMP_STEP=$((TEMP_RANGE * 1000 / 255))
 if [ "$TEMP_STEP" -eq 0 ]; then
     TEMP_STEP=1
 fi
-echo "MIN_TEMP: $(($MIN_TEMP / 100)).$(($MIN_TEMP % 100)), MAX_TEMP: $(($MAX_TEMP / 100)).$(($MAX_TEMP % 100)), TEMP_STEP: $(($TEMP_STEP / 100)).$(($TEMP_STEP % 100))"
+echo "MIN_TEMP: $(($MIN_TEMP / 100)).$(($MIN_TEMP % 100)), MAX_TEMP: $(($MAX_TEMP / 100)).$(($MAX_TEMP % 100)), TEMP_STEP: $(($TEMP_STEP / 1000)).$(($TEMP_STEP % 1000))"
 
 # Define PWM_VALUES array
 PWM_VALUES=""
@@ -27,7 +27,7 @@ map_temp_to_pwm() {
     if [ "$temp" -lt "$MIN_TEMP" ]; then
         echo 0
     else
-        local index=$(( (temp - MIN_TEMP) * 100 / TEMP_STEP ))
+        local index=$(( (temp - MIN_TEMP) * 1000 / TEMP_STEP ))
         if [ "$index" -lt 0 ]; then
             index=0
         elif [ "$index" -ge 255 ]; then
@@ -67,7 +67,7 @@ convert_pwm_to_rpm() {
     pwm=$1
     known_pwm=255
     known_rpm=5000
-    rpm=$(( (pwm * known_rpm + 50) / 100 ))
+    rpm=$(( (pwm * known_rpm + 500) / 1000 ))
     echo $rpm
 }
 
