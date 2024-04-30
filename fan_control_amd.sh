@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Temperature thresholds
-MIN_TEMP=30
-MAX_TEMP=70
+MIN_TEMP=30.0
+MAX_TEMP=70.0
 TEMP_RANGE=$((MAX_TEMP - MIN_TEMP))
 TEMP_STEP=$((TEMP_RANGE * 10 / 255))
 if [ "$TEMP_STEP" -eq 0 ]; then
