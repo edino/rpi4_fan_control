@@ -4,8 +4,8 @@
 LOG_FILE="/sdisk/tslog/fan_control.log"
 
 # Temperature thresholds
-MIN_TEMP=30
-MAX_TEMP=70
+MIN_TEMP=3000
+MAX_TEMP=7000
 TEMP_RANGE=$((MAX_TEMP - MIN_TEMP))
 TEMP_STEP=$((TEMP_RANGE * 100 / 255))
 if [ "$TEMP_STEP" -eq 0 ]; then
