@@ -7,7 +7,7 @@ LOG_FILE="/sdisk/tslog/fan_control.log"
 MIN_TEMP=3000
 MAX_TEMP=7000
 TEMP_RANGE=$((MAX_TEMP - MIN_TEMP))
-TEMP_STEP=$((TEMP_RANGE * 100 / 255))
+TEMP_STEP=$((TEMP_RANGE / 17))  # Ensure TEMP_STEP is an integer
 if [ "$TEMP_STEP" -eq 0 ]; then
     TEMP_STEP=1
 fi
