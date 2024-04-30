@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Log file
 LOG_FILE="/sdisk/tslog/fan_control.log"
