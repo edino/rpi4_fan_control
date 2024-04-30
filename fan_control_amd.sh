@@ -52,7 +52,7 @@ set_fan_speed() {
 get_cpu_temp() {
     local cpu_temp
     cpu_temp=$(grep 'Host_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
-    if [ -n "$cpu_temp" ] && [ "$cpu_temp" -eq "$cpu_temp" ]; then
+    if [ -n "$cpu_temp" ] && [ "$cpu_temp" -eq "$cpu_temp" 2>/dev/null ]; then
         echo "$cpu_temp"
         echo "$(date) - CPU Temperature: $((cpu_temp / 100)).$((cpu_temp % 100)) ºC" >> "$LOG_FILE"
     else
@@ -64,7 +64,7 @@ get_cpu_temp() {
 get_npu_temp() {
     local npu_temp
     npu_temp=$(grep 'NPU_CPU_Temperature : ' /sdisk/tslog/xgs-healthmond.log | tail -n 1 | sed 's/.*: +//;s/ Degrees.*//')
-    if [ -n "$npu_temp" ] && [ "$npu_temp" -eq "$npu_temp" ]; then
+    if [ -n "$npu_temp" ] && [ "$npu_temp" -eq "$npu_temp" 2>/dev/null ]; then
         echo "$npu_temp"
         echo "$(date) - NPU Temperature: $((npu_temp / 100)).$((npu_temp % 100)) ºC" >> "$LOG_FILE"
     else
