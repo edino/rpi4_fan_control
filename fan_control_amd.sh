@@ -12,8 +12,10 @@ echo "MIN_TEMP: $(($MIN_TEMP / 100)).$(($MIN_TEMP % 100)), MAX_TEMP: $(($MAX_TEM
 
 # Define PWM_VALUES array
 PWM_VALUES=""
-for i in $(seq 0 255); do
+i=0
+while [ $i -le 255 ]; do
     PWM_VALUES="$PWM_VALUES $i"
+    i=$((i + 1))
 done
 
 # Log file
