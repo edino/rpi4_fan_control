@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Temperature thresholds
 MIN_TEMP=30
