@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Temperature thresholds (in 1/100 degrees Celsius)
+# Temperature thresholds
 MIN_TEMP=3000
 MAX_TEMP=7000
 TEMP_RANGE=$((MAX_TEMP - MIN_TEMP))
