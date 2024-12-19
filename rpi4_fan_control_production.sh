@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# BuildDate: 07:55 PM EST 2024-04-06
+# BuildDate: 12:35 PM EST 2024-12-19
 
 # GPIO pin number for fan control
 FAN_PIN=18
@@ -63,24 +63,38 @@ convert_pwm_to_rpm() {
     local rpm=$(echo "scale=0; ($pwm * $known_rpm + 0.5) / $known_pwm" | bc)
     echo $rpm
 }
-#This script includes adjustments for smoother fan speed changes, optimized PWM range, and hysteresis-like behavior to reduce noise levels. Adjust the smoothing_factor variable to control the speed of fan speed changes. Lower values will result in slower changes and potentially lower noise levels.
-# Smooth out fan speed changes
+#This script includes adjustments for smoother fan speed changes, optimized PWM range, and hysteresis-like behaviour to reduce noise levels. Adjust the smoothing_factor variable to control the speed of fan speed changes. Lower values will result in slower changes and potentially lower noise levels.
+# Smoothing and transition settings
 previous_speed=0
 smoothed_speed=0.0
-smoothing_factor=1.2
+smoothing_factor=0.2  # Adjust to a lower value for smoother changes
+max_change_per_loop=5  # Limit the maximum change per loop to avoid abrupt transitions
 
 # Main loop
 while true; do
     temp=$(get_cpu_temp)
     target_speed=$(map_temp_to_pwm $temp)
 
-    # Smooth out fan speed changes
+    # Smooth out fan speed changes using exponential smoothing
     smoothed_speed=$(echo "scale=1; $smoothed_speed * (1 - $smoothing_factor) + $target_speed * $smoothing_factor" | bc)
     smoothed_speed_int=$(echo "scale=0; $smoothed_speed / 1" | bc)
 
+    # Limit the maximum speed change to prevent abrupt changes
+    speed_diff=$((smoothed_speed_int - previous_speed))
+    if ((speed_diff > max_change_per_loop)); then
+        smoothed_speed_int=$((previous_speed + max_change_per_loop))
+    elif ((speed_diff < -max_change_per_loop)); then
+        smoothed_speed_int=$((previous_speed - max_change_per_loop))
+    fi
+
+    # Set the fan speed with the smoothed value
     set_fan_speed $smoothed_speed_int
     rpm=$(convert_pwm_to_rpm $smoothed_speed_int)
 
     echo "$(date) - Current temperature: $temp ºC, Target fan speed: $smoothed_speed_int (PWM), Target fan RPM: $rpm RPM" >> $LOG_FILE
+
+    # Save the current speed as the previous speed for next iteration
+    previous_speed=$smoothed_speed_int
+
     sleep 5 # Check temperature every 5 seconds
 done
