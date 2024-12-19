@@ -63,7 +63,7 @@ convert_pwm_to_rpm() {
     local rpm=$(echo "scale=0; ($pwm * $known_rpm + 0.5) / $known_pwm" | bc)
     echo $rpm
 }
-#This script includes adjustments for smoother fan speed changes, optimized PWM range, and hysteresis-like behaviour to reduce noise levels. Adjust the smoothing_factor variable to control the speed of fan speed changes. Lower values will result in slower changes and potentially lower noise levels.
+#This script includes adjustments for smoother fan speed changes, optimized PWM range, and hysteresis-like behavior to reduce noise levels. Adjust the smoothing_factor variable to control the speed of fan speed changes. Lower values will result in slower changes and potentially lower noise levels.
 # Smoothing and transition settings
 previous_speed=0
 smoothed_speed=0.0
