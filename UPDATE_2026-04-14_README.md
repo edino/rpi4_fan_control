@@ -20,3 +20,86 @@ Before installing, ensure you have the required GPIO tool installed on your Rasp
 ```bash
 sudo apt update
 sudo apt install pigpiod -y
+
+Next, map the GPIO pin by adding an entry to your boot configuration file:
+
+```bash
+
+grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
+
+(Note: Depending on your OS, the config file might be located at /boot/config.txt instead).
+
+Enable the pigpiod service so the system can communicate with the GPIO pins:
+```bash
+
+sudo systemctl enable --now pigpiod
+
+Installation
+
+1. Download the script
+Download the control script directly to your local binaries folder:
+```bash
+
+sudo curl -vlO [https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh](https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh) -o /usr/local/bin/rpi4_fan_control.sh
+
+2. Make it executable
+```bash
+
+sudo chmod +x /usr/local/bin/rpi4_fan_control.sh
+
+3. Create the background service
+To make the script run automatically when the Pi boots up, we create a systemd service. Open a new file:
+```bash
+
+sudo nano /etc/systemd/system/fan_control.service
+
+Paste the following configuration into the file:
+Ini, TOML
+
+[Unit]
+Description=Ultrasonic Fan Control Service
+After=network.target pigpiod.service
+Requires=pigpiod.service
+
+[Service]
+ExecStart=/usr/local/bin/rpi4_fan_control.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+Save and exit (Ctrl + O, Enter, Ctrl + X).
+
+4. Start and enable the service
+Reload the system to recognize the new service, then start it:
+Bash
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now fan_control.service
+
+Customizing the Script
+
+If you want to adjust the temperatures at which the fan turns on or reaches maximum speed, you can easily edit the variables at the top of the script:
+Bash
+
+sudo nano /usr/local/bin/rpi4_fan_control.sh
+
+Look for these lines:
+
+    MIN_TEMP=45000 (This is 45ºC. Below this, the fan is off).
+
+    MAX_TEMP=75000 (This is 75ºC. At or above this, the fan is at 100%).
+
+    MIN_PWM=70 (The lowest power sent to the fan. Do not set this too low, or the fan motor won't have enough power to spin).
+
+Monitoring the Fan
+
+Because the script uses smart logging, you won't be spammed with log entries. You can check the history of your fan's speed changes by reading the log file:
+Bash
+
+cat /var/log/fan_control.log
+
+License
+
+This project is licensed under the GPL-3.0 license. See the LICENSE file for details.
