@@ -16,10 +16,12 @@ This script controls the fan speed of a Raspberry Pi 4 based on the CPU temperat
 
 Due to security changes in newer Linux kernels, GPIO hardware access has changed. Please choose the installation method that matches your operating system version.
 
+```
+
+---
+
 ### Option A: Modern Systems (Debian 12 Bookworm, Debian 13 Trixie & newer)
 *This version uses the Linux kernel's native hardware PWM interface. It requires zero external software packages and prevents kernel conflicts.*
-
-```
 
 *(Note: You must reboot your Raspberry Pi after this step for the hardware PWM chip to initialize).*
 
@@ -31,7 +33,6 @@ grep -q "^dtoverlay=pwm,pin=18,func=2" /boot/firmware/config.txt || echo "dtover
 (Note: You must reboot your Raspberry Pi after this step for the hardware PWM chip to initialize).
 
 ```
-
 
 **2. Download and prepare the script:**
 
