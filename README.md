@@ -151,7 +151,3 @@ Video displaying the rpi4_fan_control script running as a service:
 ## License
 
 This project is licensed under the GPL-3.0 license. See the LICENSE file for details.
-
-```
-
-```
