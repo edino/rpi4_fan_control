@@ -1,4 +1,4 @@
-```markdown
+markdown
 # Raspberry Pi 4 Fan Control
 
 **The FAN tested with this script is the one listed below:**
@@ -10,15 +10,10 @@ Control fan speed based on CPU temperature using a GPIO pin. Temp range 45-75°C
 ## Purpose
 This script controls the fan speed of a Raspberry Pi 4 based on the CPU temperature. It defines temperature thresholds and adjusts the PWM values to set the fan speed accordingly. The script continuously monitors the CPU temperature and adjusts the fan speed to maintain it within the specified range, aiming to provide effective cooling while minimizing motor noise.
 
----
-
 ## Installation
 
 Due to security changes in newer Linux kernels, GPIO hardware access has changed. Please choose the installation method that matches your operating system version.
 
-```
-
----
 
 ### Option A: Modern Systems (Debian 12 Bookworm, Debian 13 Trixie & newer)
 *This version uses the Linux kernel's native hardware PWM interface. It requires zero external software packages and prevents kernel conflicts.*
