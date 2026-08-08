@@ -1,72 +1,156 @@
-**Raspberry Pi 4 Fan Control**
+```markdown
+# Raspberry Pi 4 Fan Control
 
 **The FAN tested with this script is the one listed below:**
-
 GeeekPi Aluminum Heatsink with PWM Controllable Fan for Raspberry Pi 4, Pi 4 Armor Lite Heatsink with PWM Speed Control Fan for Raspberry Pi 4 Model B
 https://www.amazon.ca/GeeekPi-Raspberry-Aluminum-Heatsink-Controllable/dp/B091L1XKL6
 
-Control fan speed based on CPU temperature using GPIO pin. Temp range 30-70°C, adjusting PWM values.
+Control fan speed based on CPU temperature using a GPIO pin. Temp range 45-75°C, adjusting PWM values for silent, effective cooling.
 
-**Purpose**
+## Purpose
+This script controls the fan speed of a Raspberry Pi 4 based on the CPU temperature. It defines temperature thresholds and adjusts the PWM values to set the fan speed accordingly. The script continuously monitors the CPU temperature and adjusts the fan speed to maintain it within the specified range, aiming to provide effective cooling while minimizing motor noise.
 
-This script controls the fan speed of a Raspberry Pi 4 based on the CPU temperature. It defines temperature thresholds and adjusts the PWM values to set the fan speed accordingly. The script continuously monitors the CPU temperature and adjusts the fan speed to maintain it within the specified range, aiming to provide effective cooling while minimizing noise.
+---
 
-**Prerequisites**
+## Installation
 
-apt install pigpiod bc lm-sensors cpufrequtils -y
+Due to security changes in newer Linux kernels, GPIO hardware access has changed. Please choose the installation method that matches your operating system version.
 
-Add GPI18 entry at config.txt file: grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
+### Option A: Modern Systems (Debian 12 Bookworm, Debian 13 Trixie & newer)
+*This version uses the Linux kernel's native hardware PWM interface. It requires zero external software packages and prevents kernel conflicts.*
 
-(the config.txt file could be located also at /boot/config.txt)
+**1. Configure the Native PWM Overlay:**
+Add the hardware PWM entry to your config file:
+```bash
+grep -q "^dtoverlay=pwm,pin=18,func=2" /boot/firmware/config.txt || echo "dtoverlay=pwm,pin=18,func=2" | sudo tee -a /boot/firmware/config.txt
 
-Enable pigs service sudo systemctl enable --now pigpiod && sudo systemctl start --now pigpiod
+```
 
-Download the script using: sudo curl -vlO https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control.sh -o /usr/local/bin/rpi4_fan_control.sh
+*(Note: You must reboot your Raspberry Pi after this step for the hardware PWM chip to initialize).*
 
-To run this script as a system service, follow these steps:
+**2. Download and prepare the script:**
 
-Ensure the script is executable: sudo chmod +x /usr/local/bin/rpi4_fan_control.sh
+```bash
+sudo curl -vlO [https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_v2.sh](https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_v2.sh) -o /usr/local/bin/rpi4_fan_control.sh
+sudo chmod +x /usr/local/bin/rpi4_fan_control.sh
 
-Create a systemd service unit file:
+```
 
-Create a new unit file: sudo nano /etc/systemd/system/fan_control.service
+**3. Create the systemd service:**
 
-Add the following content to the file (replace /usr/local/bin/fan_control.sh with the actual path to your script):
+```bash
+sudo nano /etc/systemd/system/fan_control.service
 
-        [Unit]
-        Description=Fan Control Service
-        After=network.target
+```
 
-        [Service]
-        ExecStart=/usr/local/bin/rpi4_fan_control.sh
-        ReadWritePaths=/sys/class/hwmon/
-        Restart=always
+Add the following content:
 
-        [Install]
-        WantedBy=multi-user.target
+```ini
+[Unit]
+Description=Fan Control Service (Native PWM)
+After=network.target
 
-Reload systemd: sudo systemctl daemon-reload
+[Service]
+ExecStart=/usr/local/bin/rpi4_fan_control.sh
+ReadWritePaths=/sys/class/pwm/ /sys/devices/platform/soc/
+Restart=always
 
-Enable the service to start on boot: sudo systemctl enable --now fan_control.service && sudo systemctl start --now fan_control.service
+[Install]
+WantedBy=multi-user.target
 
-Check the status of the service: sudo systemctl status fan_control.service
+```
 
-**Usage**
+**4. Enable and start the service:**
 
-Video displaying the rpi4_fan_control script running as a service.
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now fan_control.service
+sudo systemctl status fan_control.service
 
-<div align="center">
-      <a href="https://www.youtube.com/embed/Pm1UngPpBKg">
-     <img 
-      src="https://img.youtube.com/vi/Pm1UngPpBKg/0.jpg" 
-      alt="Video displaying the rpi4_fan_control script running as a service." 
-      style="width:100%;">
-      </a>
-    </div>
+```
 
+---
 
-Clone the repository and follow the steps in the "Prerequisites" section to set up the fan control service. The script will continuously monitor the CPU temperature and adjust the fan speed accordingly.
+### Option B: Legacy Systems (Debian 11 Bullseye & older)
 
-**License**
+*This version uses the legacy `pigpiod` daemon. Use this only on older kernels.*
+
+**1. Install Prerequisites:**
+
+```bash
+sudo apt install pigpiod bc lm-sensors cpufrequtils -y
+
+```
+
+**2. Configure the GPIO Overlay:**
+
+```bash
+grep -q "^dtoverlay=gpio-fan,gpiopin=18" /boot/firmware/config.txt || echo "dtoverlay=gpio-fan,gpiopin=18" | sudo tee -a /boot/firmware/config.txt
+
+```
+
+*(The config.txt file could also be located at `/boot/config.txt` on older systems)*
+
+**3. Enable the pigs service:**
+
+```bash
+sudo systemctl enable --now pigpiod
+
+```
+
+**4. Download and prepare the script:**
+
+```bash
+sudo curl -vlO [https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_legacy.sh](https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_legacy.sh) -o /usr/local/bin/rpi4_fan_control.sh
+sudo chmod +x /usr/local/bin/rpi4_fan_control.sh
+
+```
+
+**5. Create the systemd service:**
+
+```bash
+sudo nano /etc/systemd/system/fan_control.service
+
+```
+
+Add the following content:
+
+```ini
+[Unit]
+Description=Fan Control Service (Legacy)
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/rpi4_fan_control.sh
+ReadWritePaths=/sys/class/hwmon/
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+**6. Enable and start the service:**
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now fan_control.service
+sudo systemctl status fan_control.service
+
+```
+
+---
+
+## Usage
+
+Clone the repository and follow the steps in the Installation section to set up the fan control service. The script will continuously monitor the CPU temperature and dynamically adjust the fan speed.
+
+Video displaying the rpi4_fan_control script running as a service:
+
+## License
 
 This project is licensed under the GPL-3.0 license. See the LICENSE file for details.
+
+```
+
+```
