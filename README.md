@@ -19,14 +19,19 @@ Due to security changes in newer Linux kernels, GPIO hardware access has changed
 ### Option A: Modern Systems (Debian 12 Bookworm, Debian 13 Trixie & newer)
 *This version uses the Linux kernel's native hardware PWM interface. It requires zero external software packages and prevents kernel conflicts.*
 
+```
+
+*(Note: You must reboot your Raspberry Pi after this step for the hardware PWM chip to initialize).*
+
 **1. Configure the Native PWM Overlay:**
 Add the hardware PWM entry to your config file:
 ```bash
 grep -q "^dtoverlay=pwm,pin=18,func=2" /boot/firmware/config.txt || echo "dtoverlay=pwm,pin=18,func=2" | sudo tee -a /boot/firmware/config.txt
 
+(Note: You must reboot your Raspberry Pi after this step for the hardware PWM chip to initialize).
+
 ```
 
-*(Note: You must reboot your Raspberry Pi after this step for the hardware PWM chip to initialize).*
 
 **2. Download and prepare the script:**
 
