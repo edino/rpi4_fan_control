@@ -1,4 +1,3 @@
-markdown
 # Raspberry Pi 4 Fan Control
 
 **The FAN tested with this script is the one listed below:**
