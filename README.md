@@ -32,7 +32,7 @@ grep -q "^dtoverlay=pwm,pin=18,func=2" /boot/firmware/config.txt || echo "dtover
 **2. Download and prepare the script:**
 
 ```bash
-sudo curl -vlO [https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_v2.sh](https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_v2.sh) -o /usr/local/bin/rpi4_fan_control.sh
+sudo curl -vlO [https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_debian13.sh](https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_debian13.sh) -o /usr/local/bin/rpi4_fan_control.sh
 sudo chmod +x /usr/local/bin/rpi4_fan_control.sh
 
 ```
@@ -102,7 +102,7 @@ sudo systemctl enable --now pigpiod
 **4. Download and prepare the script:**
 
 ```bash
-sudo curl -vlO [https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_legacy.sh](https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_legacy.sh) -o /usr/local/bin/rpi4_fan_control.sh
+sudo curl -vlO [https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_debian12_and_older.sh](https://raw.githubusercontent.com/edino/rpi4_fan_control/main/rpi4_fan_control_debian12_and_older.sh) -o /usr/local/bin/rpi4_fan_control.sh
 sudo chmod +x /usr/local/bin/rpi4_fan_control.sh
 
 ```
